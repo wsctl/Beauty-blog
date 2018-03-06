@@ -7,10 +7,10 @@ export default[
 	name:'admin',
 	component:Admin,
 	children:[{
-    	path:"/classfiy",
+    	path:"classfiy",
     	component:Classfiy
     },{
-    	path:"/acticl",
+    	path:"acticl",
     	component:Arcticl
     }]
 }
