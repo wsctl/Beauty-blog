@@ -2,10 +2,7 @@
   <div id="app">
    
     <router-view/>
-    <div class="list">
-    	<router-link to="/custome">前台</router-link>
-    	<router-link to="/admin">后台</router-link></div>
-    </div>
+    
   </div>
 </template>
 

@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var ClassifyModel =require('../Model/Classify')
+var createArticleModel =require('../Model/createArticle')
+var comments =require('../Model/comments')
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -20,7 +22,7 @@ router.post('/addclass',function(req,res){
 			
 			ClassifyModel.find({},function(err,result){
 				if(err){
-					
+					console.log("err",err)
 				}else{
 					res.send(result)
 				}
@@ -61,10 +63,163 @@ router.post('/update',function(req,res){
 	})
 
 
+});
+router.post('/createArcticle',function(req,res){
+	var author =req.body.author;
+	var articleClassify = req.body.articleClassify;
+	var  articleTitle =req.body.articleTitle;
+	var  content = req.body.content;
+	var  ok=false;
+	var  star=0;
+	var article = new createArticleModel({
+		articleClassify,
+		articleTitle,
+		content,
+		author,
+		star,
+		ok,
+		createtime:new Date()
+	});
+	article.save(function(err,ress){
+		if(err){
+			console.log('数据库添加失败')
+		}else{
+			console.log(ress);
+			res.send({msg:"ok"})
+		}
+	})
+	
+	
+});
+router.get('/getarticle',function(req,res){
+	 createArticleModel.find({},function(err,result){
+				if(err){
+					
+				}else{
+					res.send(result)
+				}
+			})
 })
+router.get('/delarticle',function(req,res){
+	var id = req.query.id;
+	createArticleModel.findByIdAndRemove(id,function(err,result){
+		if(err){
+			console.log('Error',err)
+		}else{
+			res.send(result)
+		}
+	})
+	
+});
+router.post('/change',function(req,res){
+	var id = req.body.id;
+	var articleClassify =req.body.articleClassify;
+	var articleTitle =req.body.articleTitle;
+	var content=req.body.content;
+	var author = req.body.author;
+	var updateStr ={
+		articleClassify,
+		articleTitle,
+		content,
+		author,
+		createtime:new Date()
+	};
+	createArticleModel.findByIdAndUpdate(id,updateStr,function(err,ress){
+		if(err){
+			console.log('Error',err)
+		}else{
+			res.send({msg:'ok'})
+		}
+	})
+	
+})
+router.get('/getById',function(req,res){
+	var id = req.query.id;
+	createArticleModel.findById(id,function(err,ress){
+		if(err){
+			console.log('Error',err)
+		}else{
+			res.send(ress)
+		}
+	})
 
-
-
+});
+router.post('/addcomment',function(req,res){
+	console.log(req.body)
+	var author = req.body.author;
+	var articleId = req.body.id;
+	var createtime = new Date;
+	var content = req.body.content;
+	var commen = new comments({
+		  author,
+		  articleId,
+		  createtime,
+		  content
+	})
+	commen.save(function(err,ress){
+		if(err){
+			console.log('数据库添加失败')
+		}else{
+			console.log(ress)
+			
+			comments.find({articleId},function(err,result){
+				if(err){
+					console.log("err",err)
+				}else{
+					res.send(result)
+				}
+			})
+		}
+	})
+});
+ router.get('/comments',function(req,res){
+ 	var id = req.query.id;
+ 	console.log(id)
+ 		comments.find({articleId:id},function(err,result){
+				if(err){
+					console.log("err",err)
+				}else{
+					res.send(result)
+				}
+			})
+ })
+ //根据id 获取点赞数量
+ router.get('/getnum',function(req,res){
+ 	var articleId = req.query.id;
+ 	comments.count({articleId},function(err,result){
+ 		  if(err){
+ 		  	console.log("获取数量：",err)
+ 		  }else{
+ 		  	res.send({num:result})
+ 		  }
+ 	})
+ })
+router.get('/getstar',function(req,res){
+	       var id =req.query.id;
+	       console.log(id)
+	       createArticleModel.findById(id,function(err,result){
+				if(err){
+					
+				}else{
+					console.log(result)
+					res.send(result)
+				}
+			})
+})
+router.post('/star',function(req,res){
+	var id = req.body.id;
+	var updatestr ={star:req.body.updatestr.star,ok:req.body.updatestr.ok};
+	console.log(id,updatestr)
+	createArticleModel.findByIdAndUpdate(id,updatestr,function(err,resu){
+		 if(err){
+		 	console.log('更新数据失败',err)
+		 }else{
+		 	console.log('更新成功')
+		 	console.log(resu)
+		 	res.send(resu)
+		 }
+	})
+})
 	
 
 module.exports = router;

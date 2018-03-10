@@ -1,6 +1,6 @@
 <template>
 	<div>
-		
+		<el-header><h1 align="center">Admin</h1></el-header>
 		<el-container style="height: 500px; border: 1px solid #eee">
 
 			<el-aside width="200px" style="background-color: rgb(238, 241, 246)">
