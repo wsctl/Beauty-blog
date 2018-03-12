@@ -3,6 +3,7 @@ var router = express.Router();
 var ClassifyModel =require('../Model/Classify')
 var createArticleModel =require('../Model/createArticle')
 var comments =require('../Model/comments')
+var Resgist =require('../Model/resgist')
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -220,6 +221,31 @@ router.post('/star',function(req,res){
 		 }
 	})
 })
+router.get('/resgist',function(req,res){
+	Resgist.find({},function(err,resu){
+		if(err){
+			console.log('注册数据没找到',err)
+		}else{
+			res.send(resu)
+		}
+	})
+})
+router.post('/addres',function(req,res){
+	var username = req.body.username;
+	var pass =req.body.pass;
+	var resgist = new Resgist({
+		 username,
+		 pass,
+		 createtime:new Date()
+	})
+	resgist.save(function(err,ress){
+		if(err){
+			console.log('注册失败')
+		}else{
+			res.send('注册成功')
+		}
+	})
 	
+})
 
 module.exports = router;

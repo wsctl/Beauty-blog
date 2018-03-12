@@ -11,6 +11,7 @@ export default[
 	redirect:"/custome/index",
 	children:[{
 		path:"index",
+		name:'index',
 		component:index
 	},{
 		path:"class",

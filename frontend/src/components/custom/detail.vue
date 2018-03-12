@@ -1,5 +1,6 @@
 <template>
 	<div>
+		{{star}}
 		<h1>详情页</h1>
 		<div class="detailContent">
 			<h2>{{obj.articleTitle}}</h2>
@@ -14,7 +15,7 @@
 			<el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="textarea1">
 			</el-input>
 			<el-button type="primary" icon="el-icon-share" @click='send'>提交评论</el-button>
-			<i class="iconfont icon-pinglun1"></i>{{zan}}
+			<i class="iconfont icon-pinglun1"></i>{{comment1}}
 		</div>
 		   <div class="content">
 		   	     <ul v-for="item in arr1">
@@ -38,7 +39,8 @@
 				arr1:[],
 				star:0,
 				ok:"",
-				str:""
+				str:"",
+				comment1:""
 				
 			}
 		},
@@ -64,13 +66,14 @@
 			var id = this.$route.params.id;
 			console.log('222',id)
 			this.$store.dispatch('comments',id).then(res=>{
+				console.log('评论',res.data)
 				 this.arr1 = res.data
-				 
+				console.log('11111',res.data)
 			});
-			//获取点赞数量
+			//获取评论数量
 			this.$store.dispatch('getcount',id).then(res=>{
 				//console.log("点赞数量",res.data.num);
-				this.zan=res.data.num
+				this.comment1=res.data.num
 			})
 			
 		},
@@ -80,7 +83,7 @@
 				var id = this.$route.params.id;
 				this.$store.dispatch('addcomment', {
 					id: this.id,
-					author: '小王',
+					author: localStorage.user,
 					content: this.textarea1,
 				}).then(res=>{
                    this.arr1 = res.data
@@ -90,7 +93,6 @@
 				   // console.log("点赞数量",res.data.num);
 				    this.zan=res.data.num
 				})
-				
 				
 			})
 				
@@ -104,7 +106,7 @@
 					if(obj.ok==false){
 						alert('false')
 					//	alert('开始')
-						this.star = obj.star+1;
+						this.star = 1;
 						console.log('false..............',this.star,obj.star)
 						//console.log('ssss',this.star)
 						this.ok = true;
@@ -113,7 +115,7 @@
 						
 						alert('true')
 						//alert('取消')
-						this.star = obj.star-1;
+						this.star = 0;
 						console.log("true...........",this.star,obj.star)
 						this.ok = false;
 						this.str="已赞"

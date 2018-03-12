@@ -42,7 +42,7 @@ export default new Vuex.Store({
 			return axios.get('http://localhost:30028/getById?id='+oid)
 		},
 		addcomment(store,params){
-			//console.log(params)
+			console.log(params)
 				return axios.post('http://localhost:30028/addcomment',params)
 		},
 		comments(store,oid){
@@ -58,6 +58,12 @@ export default new Vuex.Store({
 		getStar(store,oid){
 			//console.log(oid)
 			return axios.get('http://localhost:30028/getstar?id='+oid)
+		},
+		GetResgist(store){
+			return axios.get('http://localhost:30028/resgist')
+		},
+		addres(store,params){
+			return axios.post('http://localhost:30028/addres',params)
 		}
 	},
 	getters:{

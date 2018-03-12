@@ -11,6 +11,7 @@
 
 							<el-menu-item index="/admin/classfiy">分类管理</el-menu-item>
 							<el-menu-item index="/admin/acticl">文章管理</el-menu-item>
+							<el-menu-item index="/admin/acticl">评论管理</el-menu-item>
 						</el-menu-item-group>
 					</el-submenu>
 				</el-menu>
